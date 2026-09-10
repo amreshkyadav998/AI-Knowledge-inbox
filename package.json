@@ -1,0 +1,20 @@
+{
+  "name": "ai-knowledge-inbox",
+  "private": true,
+  "version": "1.0.0",
+  "description": "A minimal AI Knowledge Inbox: save notes and URLs, then ask questions over them with a cited RAG pipeline.",
+  "workspaces": ["server", "web"],
+  "engines": { "node": ">=20.11" },
+  "scripts": {
+    "dev": "concurrently -k -n server,web -c blue,magenta \"node --watch --import tsx server/src/index.ts\" \"vite web\"",
+    "dev:server": "npm run dev -w server",
+    "dev:web": "npm run dev -w web",
+    "build": "npm run build --workspace server && npm run build --workspace web",
+    "start": "npm run start --workspace server",
+    "test": "npm run test --workspace server",
+    "typecheck": "npm run typecheck --workspace server && npm run typecheck --workspace web"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
