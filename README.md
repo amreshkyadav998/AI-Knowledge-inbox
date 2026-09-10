@@ -2,6 +2,8 @@
 
 Save notes and URLs, then ask questions answered **only** from what you saved, with citations back to the exact text used.
 
+![AI Knowledge Inbox - a saved note answered with a cited passage](docs/screenshot.png)
+
 ```
 Add note/URL ──▶ POST /ingest ──▶ 202 + item{status:pending}
                                         │

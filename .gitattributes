@@ -1,0 +1,11 @@
+# Line-ending conversion corrupts binary files. Mark them explicitly so a
+# clone on any platform gets the bytes that were committed.
+*.pdf    binary
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.gif    binary
+*.ico    binary
+*.woff   binary
+*.woff2  binary
+*.sqlite binary
