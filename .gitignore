@@ -9,3 +9,4 @@ data/
 *.sqlite-wal
 *.sqlite-shm
 .DS_Store
+*.tsbuildinfo

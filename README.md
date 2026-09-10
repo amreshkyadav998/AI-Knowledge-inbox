@@ -173,11 +173,18 @@ Events carry timings and counts, not just prose: `rag.retrieve` logs `candidates
 
 ### Frontend
 
-React hooks, no state library. Three hooks own one concern each (`useItems`, `useAsk`, `useHealth`) and `App.tsx` is layout and wiring only. At this size Redux/Zustand would add indirection without removing any.
+React hooks, no state library. Four hooks own one concern each (`useItems`, `useAsk`, `useHealth`, `useTheme`) and `App.tsx` is layout and wiring only. At this size Redux/Zustand would add indirection without removing any.
 
-Two details worth naming:
+**Theming** is a token swap, not a `dark:` variant on every element. Colour is declared once in `index.css` as RGB triplets and consumed through Tailwind's theme, so components carry no theme logic and the two palettes cannot drift apart. The chosen theme is applied by an inline script in `index.html` *before first paint* — React cannot be the source of truth here without flashing the wrong theme on load. Until the user picks explicitly, the OS preference wins and keeps winning if it changes.
+
+**Icons** are inline SVG on a shared 24x24 grid rather than an icon package: the app needs twelve glyphs, a dependency ships hundreds, and `currentColor` means theming costs nothing.
+
+**Answer rendering** supports a small Markdown subset — bold, inline code, bullet and numbered lists — in ~80 lines and no dependency. The input is not arbitrary Markdown; it is one model's short grounded answer, in the shape the prompt asks for. `react-markdown` plus a sanitiser would be ~40kB to render text whose shape we control, and every extra construct it supports (raw HTML, images, links) is another rendering surface for text that ultimately came from a fetched web page. Anything unrecognised falls through as plain text, so a model that ignores the format never loses the user's content.
+
+Three details worth naming:
 - `useAsk` guards against out-of-order responses with a request counter. Without it a slow first answer can land after a fast second one and overwrite it — which looks exactly like the model answering the wrong question.
 - `useItems` rolls back optimistic deletes if the request fails, rather than leaving the UI lying about what is stored.
+- Ask suggestions are seeded from the titles of what is actually indexed, so they are always answerable. A generic list of example questions would mostly return "not found", which teaches the user the wrong thing about the product.
 
 `HealthBanner` surfaces the two states that otherwise produce confusing behaviour with no visible cause: API unreachable, and silently running the keyless fallback.
 
